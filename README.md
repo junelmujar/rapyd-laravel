@@ -1,6 +1,44 @@
 rapyd-laravel
 =============
 
+## Whats New (4/15/2014)
+
+- Modified DataGrid code to apply attributes to table cells ```<td>```
+- Modified DataGrid code to apply data transformations to cell values using Blade syntax
+
+Example:
+
+```php
+   //you can use same source types of DataSet 
+   $datagrid = DataGrid::source("articles");
+   
+   // Example: with attributes & transforms
+   // Result: <td width="200" class="align-center"><h1>This Is A Title</h1></td>
+   
+   $datagrid->add('title','Title', true)
+   			->attributes('width="200" class="align-center"')
+   			->transforms('@if ($title) <h1>{{$title}}</h1> @else <h1>Untitled</h1> @endif');
+
+   // Or 
+   // Result: <td width="200" class="align-center">THIS IS A TITLE</td>
+   $datagrid->add('title','Title', true)
+   			->attributes('width="200" class="align-center"')
+   			->transforms('{{ strtoupper($title) }}');
+   			
+   $datagrid->add('{{ strtolower($sef) }}','Url Segment'); //blade syntax
+   
+   // Add default set of actions + cell container attributes
+   $datagrid->addActions(URL::current(), 'width="125" class="align-center"');
+   
+   $datagrid->paginate(10);
+   
+   $grid = $datagrid->getGrid();
+
+  
+``` 
+
+## About
+
 This is a pool of presentation and editing widgets (Grids and Forms) for laravel 4.  
 Nothing to "generate", just some classes to let you develop and maintain CRUD backends in few lines of code.
 
