@@ -30,7 +30,7 @@
         @foreach ($dg->rows as $row)
             <tr>
                 @foreach ($row as $cell)
-                <td>{{ $cell }}</td>
+                    <td {{ $cell->attributes }}> {{ $cell->data }}</td>
                 @endforeach
             </tr>
         @endforeach
