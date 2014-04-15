@@ -25,9 +25,9 @@ class DataGrid extends DataSet
      *
      * @return Column
      */
-    public function add($name, $label = null, $orderby = false)
+    public function add($name, $label = null, $orderby = false, $transform = null)
     {
-        $column = new Column($name, $label, $orderby);
+        $column = new Column($name, $label, $orderby, $transform);
         $this->columns[$name] = $column;
         return $column;
     }
