@@ -9,13 +9,14 @@ use Zofe\Rapyd\Exceptions\DataGridException;
 class DataGrid extends DataSet
 {
 
-    protected $fields = array();
+    protected $fields      = array();
     /** @var Column[]  */
-    public $columns = array();
-    public $rows = array();
-    public $output = "";
-
-    private $uri = null;
+    public $columns        = array();
+    public $rows           = array();
+    public $cellAttributes = array();
+    public $output         = "";
+    
+    private $uri           = null;
 
     /**
      * @param string $name
@@ -44,11 +45,21 @@ class DataGrid extends DataSet
         }
 
         foreach ($this->data as $tablerow) {
+            
             $row = array();
-
+            
+            // Added by Junel Mujar
+            // Local variables for transforms and attributes
+            $attributes = array();
+            $transforms = array();
+            
             foreach ($this->columns as $column) {
+                
                 $cell = '';
-
+                
+                $attributes[] = $column->attributes;
+                $transforms[] = array('column' => $column->name, 'transform' => $column->transform);
+                
                  if (strpos($column->name, '{{') !== false) {
                     
                     if (is_object($tablerow) && method_exists($tablerow, "getAttributes")) {
@@ -77,7 +88,26 @@ class DataGrid extends DataSet
                 }
                 $row[] = $cell;
             }
-            $this->rows[] = $row;
+            
+            //$this->rows[] = $row; 
+            
+            /*  
+            // Added by Junel L. Mujar
+            // Support for transforming cell values, adding cell attributes
+            */
+            $data = array();
+            foreach ($row as $k => $v) {
+                $value = null;
+                if ($transforms[$k]['transform'] <> '') {
+                    $value = $this->parser->compileString($transforms[$k]['transform'], $tablerow->getAttributes());
+                } else {
+                    $value = $v;
+                }
+                $cellItem = new Cell($value, $attributes[$k]);
+                $data[]   = $cellItem;
+            }
+
+            $this->rows[] = $data;            
         }
 
         return \View::make($view, array('dg' => $this, 'buttons'=>$this->button_container, 'label'=>$this->label));
