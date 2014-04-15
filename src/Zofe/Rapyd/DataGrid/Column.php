@@ -26,15 +26,15 @@ class Column extends Widget
     public $orderby_asc_url;
     public $orderby_desc_url;
 
-    public function __construct($name, $label = null, $orderby = false)
+    public function __construct($name, $label = null, $orderby = false, $attributes = null, $transform = null)
     {
         $this->name = $name;
         $this->label($label);
         $this->orderby($orderby);
         $this->attributes($attributes);
-        $this->transforms($transform);        
+        $this->transforms($transform);
     }
-
+    
     protected function label($label)
     {
         $this->label = $label;
