@@ -119,10 +119,10 @@ class DataGrid extends DataSet
         return $this->output;
     }
 
-    public function addActions($base_uri)
+    public function addActions($base_uri, $attributes = null)
     {
         $this->uri = $base_uri;
-        $this->add('__actions', 'Actions');
+        $this->add('__actions', 'Actions')->attributes($attributes);
     }
 
     public function getColumn($column_name)
